@@ -111,12 +111,15 @@ services:
     container_name: pyspark
     image: jupyter/pyspark-notebook
     volumes: 
-      - ./pyspark:/pyspark
+      - ./pyspark:/home/jovyan/work
     networks:
       - data-engineering-network
     ports:
       - '8080:8888'
-    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/pyspark"
+    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
+    user: root
+    environment:
+      - GRANT_SUDO=yes
 
 networks:
   data-engineering-network:
