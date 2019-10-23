@@ -6,7 +6,6 @@ kafka_running = False
 
 while kafka_running == False:
     try:
-        print('Trying to connect')
         producer = KafkaProducer(bootstrap_servers=['kafka-1:9092'],
                                 value_serializer=lambda x: dumps(x).encode('utf-8'))
     except:
