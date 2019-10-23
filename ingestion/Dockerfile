@@ -2,6 +2,6 @@ FROM python:3.6.9-slim-buster
 
 ADD twitter-ingestion.py /
 
-RUN pip install kafka-python
+RUN pip install kafka-python tweepy
 
 CMD [ "python", "-u", "./twitter-ingestion.py" ]
