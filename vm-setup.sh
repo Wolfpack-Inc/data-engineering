@@ -29,4 +29,4 @@ sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-c
 sudo chmod +x /usr/local/bin/docker-compose
 
 # Docker compose up
-docker-compose up
+sudo docker-compose up
