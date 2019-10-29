@@ -1,6 +1,6 @@
 FROM python:3.6.9-slim-buster
 
-ADD twitter-ingestion.py /
+ADD crypto-ingestion-script.py /
 
 RUN pip install kafka-python requests
 
