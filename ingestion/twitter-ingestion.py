@@ -44,4 +44,4 @@ auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
 stream = Stream(auth, to_kafka)
-stream.filter(track=['basketball'])
+stream.filter(track=['btc', 'bitcoin', 'xbt', 'satoshi'], languages=['en'])
