@@ -115,6 +115,13 @@ services:
     networks:
       - data-engineering-network
 
+  crypto-ingestion:
+    container_name: crypto-ingestion
+    build: ./crypto-ingestion
+    image: crypto_ingestion:latest
+    networks:
+      - data-engineering-network
+
   pyspark:
     container_name: pyspark
     image: jupyter/pyspark-notebook
