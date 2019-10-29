@@ -100,33 +100,33 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9094
 
-  # ingestion:
-  #   container_name: ingestion
-  #   build: ./ingestion
-  #   image: ingestion:latest
-  #   networks:
-  #     - data-engineering-network
+  ingestion:
+    container_name: ingestion
+    build: ./ingestion
+    image: ingestion:latest
+    networks:
+      - data-engineering-network
 
   crypto-ingestion:
-    container_name: crypto_ingestion
+    container_name: crypto-ingestion
     build: ./crypto-ingestion
     image: crypto_ingestion:latest
     networks:
       - data-engineering-network
 
-  # pyspark:
-  #   container_name: pyspark
-  #   image: jupyter/pyspark-notebook
-  #   volumes: 
-  #     - ./pyspark:/home/jovyan/work
-  #   networks:
-  #     - data-engineering-network
-  #   ports:
-  #     - '8080:8888'
-  #   command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
-  #   user: root
-  #   environment:
-  #     - GRANT_SUDO=yes
+  pyspark:
+    container_name: pyspark
+    image: jupyter/pyspark-notebook
+    volumes: 
+      - ./pyspark:/home/jovyan/work
+    networks:
+      - data-engineering-network
+    ports:
+      - '8080:8888'
+    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
+    user: root
+    environment:
+      - GRANT_SUDO=yes
 
 networks:
   data-engineering-network:

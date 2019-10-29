@@ -4,4 +4,4 @@ ADD twitter-ingestion.py /
 
 RUN pip install kafka-python tweepy
 
-CMD [ "python", "-u", "./twitter-ingestion.py" ]
+CMD [ "python", "-u", "./twitter-ingestion.py"]
