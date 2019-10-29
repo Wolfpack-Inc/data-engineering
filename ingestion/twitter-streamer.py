@@ -37,4 +37,4 @@ if __name__ == '__main__':
     auth.set_access_token(access_token, access_token_secret)
 
     stream = Stream(auth, l)
-    stream.filter(track=['programming'])
+    stream.filter(track=['btc', 'bitcoin', 'xbt', 'satoshi'], languages=['en'])
