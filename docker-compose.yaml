@@ -9,6 +9,8 @@ services:
       - data-engineering-network
     ports:
       - '12181:12181'
+    logging:
+      driver: none
     environment:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 12181
@@ -25,6 +27,8 @@ services:
       - data-engineering-network
     ports:
       - '22181:22181'
+    logging:
+      driver: none
     environment:
       ZOOKEEPER_SERVER_ID: 2
       ZOOKEEPER_CLIENT_PORT: 22181
@@ -41,6 +45,8 @@ services:
       - data-engineering-network
     ports:
       - '32181:32181'
+    logging:
+      driver: none
     environment:
       ZOOKEEPER_SERVER_ID: 3
       ZOOKEEPER_CLIENT_PORT: 32181
@@ -61,6 +67,8 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+    logging:
+      driver: none
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
@@ -78,6 +86,8 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+    logging:
+      driver: none
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
@@ -95,6 +105,8 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
+    logging:
+      driver: none
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
@@ -107,18 +119,24 @@ services:
       - data-engineering-network
     ports:
       - '27017:27017'
+    logging:
+      driver: none
 
-  ingestion:
-    container_name: ingestion
-    build: ./ingestion
-    image: ingestion:latest
+  twitter-ingestion:
+    container_name: twitter-ingestion
+    build: 
+      context: ./ingestion
+      dockerfile: twitter.Dockerfile
+    image: twitter-ingestion:latest
     networks:
       - data-engineering-network
 
   crypto-ingestion:
     container_name: crypto-ingestion
-    build: ./crypto-ingestion
-    image: crypto_ingestion:latest
+    build: 
+      context: ./ingestion
+      dockerfile: crypto.Dockerfile
+    image: crypto-ingestion:latest
     networks:
       - data-engineering-network
 
@@ -131,6 +149,8 @@ services:
       - data-engineering-network
     ports:
       - '8080:8888'
+    logging:
+      driver: none
     command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
     user: root
     environment:

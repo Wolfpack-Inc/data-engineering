@@ -33,11 +33,17 @@ class StreamToKafka(StreamListener):
 
     def on_data(self, data):
         tweet = json.loads(data)
+        print(tweet['text'].replace('\n', ''))
         producer.send('twitter', value=tweet)
+        sleep(5)
         return True
 
     def on_error(self, status):
         print(status)
+
+        if status == 420:
+            print('Rate limited')
+            sleep(30)
 
 to_kafka = StreamToKafka()
 auth = OAuthHandler(consumer_key, consumer_secret)
