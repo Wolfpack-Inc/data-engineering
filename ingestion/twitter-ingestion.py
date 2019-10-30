@@ -5,6 +5,10 @@ from time import sleep
 from json import dumps, loads
 from kafka import KafkaProducer
 import tweepy
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+import nltk
+nltk.download('vader_lexicon')
 
 # Twitter keys
 consumer_key = "I8Qvxs0xU5ifPHhfg98kxJVc4"
@@ -26,6 +30,9 @@ while kafka_running == False:
         kafka_running = True
         print("Connected to kafka broker!")
 
+# Create the vader sentiment analyser
+analyzer = SentimentIntensityAnalyzer()
+
 class StreamToKafka(StreamListener):
     """ 
     A listener handles tweets that are received from the stream.
@@ -33,8 +40,22 @@ class StreamToKafka(StreamListener):
 
     def on_data(self, data):
         tweet = json.loads(data)
-        print(tweet['text'].replace('\n', ''))
-        producer.send('twitter', value=tweet)
+
+        # Get the sentiment of the tweet using vader
+        sentiment = analyzer.polarity_scores(tweet['text'])['compound']
+
+        # Print the tweet and the sentiment
+        print(round(sentiment, 2), '|', tweet['text'].replace('\n', ''))
+
+        # Data to send
+        data = {
+            'timestamp': tweet['created_at'],
+            'text': tweet['text'],
+            'sentiment': sentiment
+        }
+
+        producer.send('twitter', value=data)
+
         sleep(5)
         return True
 
