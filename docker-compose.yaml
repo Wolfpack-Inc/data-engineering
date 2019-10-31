@@ -149,8 +149,6 @@ services:
       - data-engineering-network
     ports:
       - '8080:8888'
-    logging:
-      driver: none
     command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
     user: root
     environment:

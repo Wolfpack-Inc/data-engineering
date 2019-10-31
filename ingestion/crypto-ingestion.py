@@ -37,6 +37,6 @@ while True:
     # Send data to kafka
     producer.send('crypto', value=data)
 
-    # Wait 30 seconds till we send the next update
-    sleep(30)
+    # Wait 5 seconds till we send the next update
+    sleep(5)
 
