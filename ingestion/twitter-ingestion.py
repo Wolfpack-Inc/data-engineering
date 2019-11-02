@@ -56,7 +56,7 @@ class StreamToKafka(StreamListener):
 
         producer.send('twitter', value=data)
 
-        sleep(5)
+        # sleep(5)
         return True
 
     def on_error(self, status):
