@@ -6,6 +6,8 @@ services:
     image: mongo
     networks:
       - data-engineering-network
+    volumes:
+    - /mongo:/data/db
     ports:
       - '27017:27017'
 
