@@ -8,15 +8,22 @@ services:
       - data-engineering-network
     ports:
       - '27017:27017'
-    logging:
-      driver: none
 
-  storage:
-    container_name: storage
+  twitter-storage:
+    container_name: twitter-storage
     build: 
       context: ./storage
-      dockerfile: Dockerfile
-    image: storage:latest
+      dockerfile: twitter.Dockerfile
+    image: twitter-storage:latest
+    networks:
+      - data-engineering-network
+
+  crypto-storage:
+    container_name: crypto-storage
+    build: 
+      context: ./storage
+      dockerfile: crypto.Dockerfile
+    image: crypto-storage:latest
     networks:
       - data-engineering-network
 
