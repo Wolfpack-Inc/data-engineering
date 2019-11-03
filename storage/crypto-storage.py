@@ -13,8 +13,8 @@ crypto = db.crypto
 
 while True:
     # Format the url for the api to get a OK response
-    url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=EUR'
-    price = loads(requests.get(url).text)['EUR']
+    url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD'
+    price = loads(requests.get(url).text)['USD']
 
     # Get the current time
     current_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
@@ -25,5 +25,5 @@ while True:
     # Store in the database
     crypto.insert_one(data)
 
-    # Wait 10 seconds till we send the next update
+    # Wait 60 seconds till we send the next update
     sleep(60)
