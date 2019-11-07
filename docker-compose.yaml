@@ -1,144 +1,144 @@
 version: '3.5'
 
 services:
-  zookeeper-1:
-    container_name: zookeeper-1
-    image: confluentinc/cp-zookeeper:5.3.1
-    hostname: zookeeper-1
-    networks:
-      - data-engineering-network
-    ports:
-      - '12181:12181'
-    logging:
-      driver: none
-    environment:
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 12181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_INIT_LIMIT: 5
-      ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+  # zookeeper-1:
+  #   container_name: zookeeper-1
+  #   image: confluentinc/cp-zookeeper:5.3.1
+  #   hostname: zookeeper-1
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '12181:12181'
+  #   logging:
+  #     driver: none
+  #   environment:
+  #     ZOOKEEPER_SERVER_ID: 1
+  #     ZOOKEEPER_CLIENT_PORT: 12181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #     ZOOKEEPER_INIT_LIMIT: 5
+  #     ZOOKEEPER_SYNC_LIMIT: 2
+  #     ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
 
-  zookeeper-2:
-    container_name: zookeeper-2
-    image: confluentinc/cp-zookeeper:5.3.1
-    hostname: zookeeper-2
-    networks:
-      - data-engineering-network
-    ports:
-      - '22181:22181'
-    logging:
-      driver: none
-    environment:
-      ZOOKEEPER_SERVER_ID: 2
-      ZOOKEEPER_CLIENT_PORT: 22181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_INIT_LIMIT: 5
-      ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+  # zookeeper-2:
+  #   container_name: zookeeper-2
+  #   image: confluentinc/cp-zookeeper:5.3.1
+  #   hostname: zookeeper-2
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '22181:22181'
+  #   logging:
+  #     driver: none
+  #   environment:
+  #     ZOOKEEPER_SERVER_ID: 2
+  #     ZOOKEEPER_CLIENT_PORT: 22181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #     ZOOKEEPER_INIT_LIMIT: 5
+  #     ZOOKEEPER_SYNC_LIMIT: 2
+  #     ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
 
-  zookeeper-3:
-    container_name: zookeeper-3
-    image: confluentinc/cp-zookeeper:5.3.1
-    hostname: zookeeper-3
-    networks:
-      - data-engineering-network
-    ports:
-      - '32181:32181'
-    logging:
-      driver: none
-    environment:
-      ZOOKEEPER_SERVER_ID: 3
-      ZOOKEEPER_CLIENT_PORT: 32181
-      ZOOKEEPER_TICK_TIME: 2000
-      ZOOKEEPER_INIT_LIMIT: 5
-      ZOOKEEPER_SYNC_LIMIT: 2
-      ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+  # zookeeper-3:
+  #   container_name: zookeeper-3
+  #   image: confluentinc/cp-zookeeper:5.3.1
+  #   hostname: zookeeper-3
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '32181:32181'
+  #   logging:
+  #     driver: none
+  #   environment:
+  #     ZOOKEEPER_SERVER_ID: 3
+  #     ZOOKEEPER_CLIENT_PORT: 32181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #     ZOOKEEPER_INIT_LIMIT: 5
+  #     ZOOKEEPER_SYNC_LIMIT: 2
+  #     ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
 
-  kafka-1:
-    container_name: kafka-1
-    image: confluentinc/cp-kafka:5.3.1
-    hostname: kafka-1
-    networks:
-      - data-engineering-network
-    ports:
-      - '9092:9092'
-    depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
-    logging:
-      driver: none
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092
+  # kafka-1:
+  #   container_name: kafka-1
+  #   image: confluentinc/cp-kafka:5.3.1
+  #   hostname: kafka-1
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '9092:9092'
+  #   depends_on:
+  #     - zookeeper-1
+  #     - zookeeper-2
+  #     - zookeeper-3
+  #   logging:
+  #     driver: none
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092
 
-  kafka-2:
-    container_name: kafka-2
-    image: confluentinc/cp-kafka:5.3.1
-    hostname: kafka-2
-    networks:
-      - data-engineering-network
-    ports:
-      - '9093:9093'
-    depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
-    logging:
-      driver: none
-    environment:
-      KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9093
+  # kafka-2:
+  #   container_name: kafka-2
+  #   image: confluentinc/cp-kafka:5.3.1
+  #   hostname: kafka-2
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '9093:9093'
+  #   depends_on:
+  #     - zookeeper-1
+  #     - zookeeper-2
+  #     - zookeeper-3
+  #   logging:
+  #     driver: none
+  #   environment:
+  #     KAFKA_BROKER_ID: 2
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9093
 
-  kafka-3:
-    container_name: kafka-3
-    image: confluentinc/cp-kafka:5.3.1
-    hostname: kafka-3
-    networks:
-      - data-engineering-network
-    ports:
-      - '9094:9094'
-    depends_on:
-      - zookeeper-1
-      - zookeeper-2
-      - zookeeper-3
-    logging:
-      driver: none
-    environment:
-      KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9094
+  # kafka-3:
+  #   container_name: kafka-3
+  #   image: confluentinc/cp-kafka:5.3.1
+  #   hostname: kafka-3
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '9094:9094'
+  #   depends_on:
+  #     - zookeeper-1
+  #     - zookeeper-2
+  #     - zookeeper-3
+  #   logging:
+  #     driver: none
+  #   environment:
+  #     KAFKA_BROKER_ID: 3
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9094
 
-  mongo:
-    container_name: mongo
-    image: mongo
-    networks:
-      - data-engineering-network
-    ports:
-      - '27017:27017'
-    logging:
-      driver: none
+  # mongo:
+  #   container_name: mongo
+  #   image: mongo
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '27017:27017'
+  #   logging:
+  #     driver: none
 
-  twitter-ingestion:
-    container_name: twitter-ingestion
-    build: 
-      context: ./ingestion
-      dockerfile: twitter.Dockerfile
-    image: twitter-ingestion:latest
-    networks:
-      - data-engineering-network
+  # twitter-ingestion:
+  #   container_name: twitter-ingestion
+  #   build: 
+  #     context: ./ingestion
+  #     dockerfile: twitter.Dockerfile
+  #   image: twitter-ingestion:latest
+  #   networks:
+  #     - data-engineering-network
 
-  crypto-ingestion:
-    container_name: crypto-ingestion
-    build: 
-      context: ./ingestion
-      dockerfile: crypto.Dockerfile
-    image: crypto-ingestion:latest
-    networks:
-      - data-engineering-network
+  # crypto-ingestion:
+  #   container_name: crypto-ingestion
+  #   build: 
+  #     context: ./ingestion
+  #     dockerfile: crypto.Dockerfile
+  #   image: crypto-ingestion:latest
+  #   networks:
+  #     - data-engineering-network
 
   pyspark:
     container_name: pyspark
@@ -153,6 +153,24 @@ services:
     user: root
     environment:
       - GRANT_SUDO=yes
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.2
+    ports:
+      - "5601:5601"
 
 networks:
   data-engineering-network:
