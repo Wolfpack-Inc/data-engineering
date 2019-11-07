@@ -122,23 +122,23 @@ services:
     logging:
       driver: none
 
-  twitter-ingestion:
-    container_name: twitter-ingestion
-    build: 
-      context: ./ingestion
-      dockerfile: twitter.Dockerfile
-    image: twitter-ingestion:latest
-    networks:
-      - data-engineering-network
+  # twitter-ingestion:
+  #   container_name: twitter-ingestion
+  #   build: 
+  #     context: ./ingestion
+  #     dockerfile: twitter.Dockerfile
+  #   image: twitter-ingestion:latest
+  #   networks:
+  #     - data-engineering-network
 
-  crypto-ingestion:
-    container_name: crypto-ingestion
-    build: 
-      context: ./ingestion
-      dockerfile: crypto.Dockerfile
-    image: crypto-ingestion:latest
-    networks:
-      - data-engineering-network
+  # crypto-ingestion:
+  #   container_name: crypto-ingestion
+  #   build: 
+  #     context: ./ingestion
+  #     dockerfile: crypto.Dockerfile
+  #   image: crypto-ingestion:latest
+  #   networks:
+  #     - data-engineering-network
 
   pyspark:
     container_name: pyspark
@@ -153,6 +153,8 @@ services:
     user: root
     environment:
       - GRANT_SUDO=yes
+    logging:
+      driver: none
 
 networks:
   data-engineering-network:
