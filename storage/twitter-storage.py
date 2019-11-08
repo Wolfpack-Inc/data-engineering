@@ -32,6 +32,9 @@ class StreamStorage(StreamListener):
     def on_data(self, data):
         tweet = json.loads(data)
 
+        if 'text' not in tweet:
+            return True
+
         # Get the sentiment of the tweet using vader
         sentiment = analyzer.polarity_scores(tweet['text'])['compound']
 
