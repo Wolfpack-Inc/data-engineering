@@ -10,7 +10,7 @@ from tensorflow.keras import backend as K
 from tensorflow.keras import optimizers
 from hyperopt import Trials, STATUS_OK, tpe
 from hyperas import optim
-from hyperas.distributions import choice, uniform
+from hyperas.distributions import choice, uniform, quniform
 
 # Sklearn imports
 from sklearn.preprocessing import Normalizer, MinMaxScaler
@@ -112,17 +112,20 @@ def create_model(x_train, y_train, x_test, y_test):
     n_features = 3
 
     model = Sequential()
-    model.add(LSTM({{choice([64, 128, 256])}}, activation='relu',
+    model.add(LSTM(units=int({{quniform(4,64,1)}}), activation='relu',
                    input_shape=(n_steps, n_features)))
-    model.add(Dropout({{uniform(0,1)}}))
-    model.add(Dense({{choice([64, 128, 256])}}, activation='relu'))
-    model.add(Dropout({{uniform(0, 1)}}))
+    model.add(Dropout(rate={{uniform(0,1)}}))
+    
+    for _ in range({{choice([1,2])}}):
+        model.add(Dense(units=int({{quniform(4,64,1)}}), activation='relu'))
+        model.add(Dropout(rate={{uniform(0, 1)}}))
+        
     model.add(Dense(1))
     model.compile(optimizer={{choice(['rmsprop', 'adam'])}}, loss='mse')
 
     result = model.fit(x_train, y_train,
                        batch_size={{choice([64, 128])}},
-                       epochs={{choice([16, 32, 64])}},
+                       epochs={{choice([8, 16, 32, 64])}},
                        verbose=2,
                        validation_split=0.1)
 
@@ -135,8 +138,9 @@ if __name__ == '__main__':
     best_run, best_model = optim.minimize(model=create_model,
                                           data=data,
                                           algo=tpe.suggest,
-                                          max_evals=5,
-                                          trials=Trials())
+                                          max_evals=1,
+                                          trials=Trials(),
+                                          eval_space=True)
 
     x_train, y_train, x_test, y_test = data()
 
@@ -145,3 +149,5 @@ if __name__ == '__main__':
 
     print("Best performing model chosen hyper-parameters:")
     print(best_run)
+    
+    print(best_model.summary())
