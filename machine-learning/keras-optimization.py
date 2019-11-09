@@ -138,7 +138,7 @@ if __name__ == '__main__':
     best_run, best_model = optim.minimize(model=create_model,
                                           data=data,
                                           algo=tpe.suggest,
-                                          max_evals=1,
+                                          max_evals=10,
                                           trials=Trials(),
                                           eval_space=True)
 
