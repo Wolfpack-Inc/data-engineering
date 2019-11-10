@@ -5,7 +5,7 @@ from math import sqrt
 from datetime import datetime, timedelta
 from tensorflow.keras.models import Sequential, load_model, model_from_json, Model
 from tensorflow.keras.layers import Dense, Dropout, Input, BatchNormalization, LSTM, Bidirectional
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard, ModelCheckpoint
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 from tensorflow.keras import backend as K
 from tensorflow.keras import optimizers
 from hyperopt import Trials, STATUS_OK, tpe
@@ -13,7 +13,7 @@ from hyperas import optim
 from hyperas.distributions import choice, uniform, quniform
 
 # Sklearn imports
-from sklearn.preprocessing import Normalizer, MinMaxScaler
+from sklearn.preprocessing import Normalizer, MinMaxScaler, StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
@@ -64,7 +64,10 @@ def data():
         .sort_index()
         .dropna())
 
-    n_steps = 12
+    df['price_diff'] = df['price'].diff()
+    df = df.dropna()
+
+    n_steps = 24
     train_size = int(.75 * len(df))
 
     # Train test split
@@ -90,10 +93,15 @@ def data():
     x_train = split_sequence(train_scaled, n_steps)
     x_test = split_sequence(test_scaled, n_steps)
 
-    y_test = df.iloc[-len(x_test):]['price'].values
-    y_train = df.iloc[n_steps:len(x_train)+n_steps]['price'].values
+    # y_prices = df['price'].diff()
+    y_prices = df['price']
 
-    print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
+    y_test = y_prices.iloc[-len(x_test):].values
+    y_train = y_prices.iloc[n_steps:len(x_train)+n_steps].values
+
+    # Flatten the outputs (Input on dense layers)
+    x_train = x_train.reshape(-1, x_train.shape[1]*x_train.shape[2])
+    x_test = x_test.reshape(-1, x_test.shape[1]*x_test.shape[2])
 
     return x_train, y_train, x_test, y_test
 
@@ -108,29 +116,38 @@ def create_model(x_train, y_train, x_test, y_test):
     The last one is optional, though recommended, namely:
         - model: specify the model just created so that we can later use it again.
     """
-    n_steps = 12
+    def root_mean_squared_error(y_true, y_pred):
+        return K.sqrt(K.mean(K.square(y_pred - y_true))) 
+
+    n_steps = 24
     n_features = 3
 
     model = Sequential()
-    model.add(LSTM(units=int({{quniform(4,64,1)}}), activation='relu',
-                   input_shape=(n_steps, n_features)))
+    model.add(Dense(int({{quniform(4,64,1)}}), activation='relu', input_shape=(n_steps*n_features,)))
     model.add(Dropout(rate={{uniform(0,1)}}))
     
-    for _ in range({{choice([1,2])}}):
+    for _ in range(int({{quniform(1,3,1)}})):
         model.add(Dense(units=int({{quniform(4,64,1)}}), activation='relu'))
         model.add(Dropout(rate={{uniform(0, 1)}}))
         
     model.add(Dense(1))
-    model.compile(optimizer={{choice(['rmsprop', 'adam'])}}, loss='mse')
+    model.compile(optimizer={{choice(['rmsprop', 'adam', 'sgd'])}}, loss=root_mean_squared_error)
+
+    early_stopping = EarlyStopping(monitor='val_loss', patience=24)
+    checkpointer = ModelCheckpoint(filepath='keras_weights_{}.hdf5'.format(model.name),
+                                   verbose=1,
+                                   save_best_only=True)
 
     result = model.fit(x_train, y_train,
-                       batch_size={{choice([64, 128])}},
-                       epochs={{choice([8, 16, 32, 64])}},
+                       batch_size=int({{quniform(64,512,1)}}),
+                       epochs=int({{quniform(64,512,1)}}),
                        verbose=2,
-                       validation_split=0.1)
+                       validation_split=0.2,
+                       callbacks=[early_stopping, checkpointer])
 
     validation_loss = np.amin(result.history['val_loss'])
     print('Best validation loss of epoch:', validation_loss)
+    print(model.summary())
 
     return {'loss': validation_loss, 'status': STATUS_OK, 'model': model}
 
@@ -151,3 +168,5 @@ if __name__ == '__main__':
     print(best_run)
     
     print(best_model.summary())
+
+    best_model.save('best_model.h5')
