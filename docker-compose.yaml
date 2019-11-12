@@ -10,29 +10,70 @@ services:
      - 2181:2181
      - 2888:2888
      - 3888:3888
+    logging:
+      driver: none
 
   kafka:
     container_name: kafka
-    image: wurstmeister/kafka:0.11.0.1
+    image: wurstmeister/kafka
     depends_on:
       - zookeeper
     networks:
       - data-engineering-network
     ports:
-      - "9092:9092"
+      - '9092:9092'
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_HOST_NAME: "kafka"
-
-  mongo:
-    container_name: mongo
-    image: mongo
-    networks:
-      - data-engineering-network
-    ports:
-      - '27017:27017'
+      KAFKA_ADVERTISED_HOST_NAME: 'kafka'
     logging:
       driver: none
+
+  connect:
+    container_name: connect
+    image: confluentinc/cp-kafka-connect:3.3.0
+    ports:
+      - 8083:8083
+    depends_on:
+      - zookeeper
+      - kafka
+    networks:
+      - data-engineering-network
+    volumes:
+      - ./connect-plugins:/connect-plugins
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: 'connect'
+      CONNECT_CONFIG_STORAGE_TOPIC: connect-config
+      CONNECT_OFFSET_STORAGE_TOPIC: connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: connect-status
+      CONNECT_REPLICATION_FACTOR: 1
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: 'org.apache.kafka.connect.storage.StringConverter'
+      CONNECT_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: 'false'
+      CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: 'io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor'
+      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: 'io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor'
+      CONNECT_REST_ADVERTISED_HOST_NAME: 'connect'
+      CONNECT_ZOOKEEPER_CONNECT: zookeeper:2181
+      CONNECT_PLUGIN_PATH: /connect-plugins
+      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
+      CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
+      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-3.3.0.jar
+
+  # mongo:
+  #   container_name: mongo
+  #   image: mongo
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '27017:27017'
+  #   logging:
+  #     driver: none
 
   twitter-ingestion:
     container_name: twitter-ingestion
@@ -56,37 +97,48 @@ services:
     networks:
       - data-engineering-network
 
-  pyspark:
-    container_name: pyspark
-    image: jupyter/pyspark-notebook
-    volumes: 
-      - ./pyspark:/home/jovyan/work
-    networks:
-      - data-engineering-network
-    ports:
-      - '8080:8888'
-    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
-    user: root
-    environment:
-      - GRANT_SUDO=yes
+  # pyspark:
+  #   container_name: pyspark
+  #   image: jupyter/pyspark-notebook
+  #   volumes: 
+  #     - ./pyspark:/home/jovyan/work
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '8080:8888'
+  #   command: 'start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work'
+  #   user: root
+  #   environment:
+  #     - GRANT_SUDO=yes
   
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    networks:
+      - data-engineering-network
     ulimits:
       memlock:
         soft: -1
         hard: -1
     ports:
-      - "9200:9200"
+      - '9200:9200'
+    logging:
+      driver: none
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.3.2
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.4.2
+    networks:
+      - data-engineering-network
     ports:
-      - "5601:5601"
+      - '5601:5601'
+    logging:
+      driver: none
 
 networks:
   data-engineering-network:

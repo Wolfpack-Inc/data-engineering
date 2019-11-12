@@ -8,11 +8,18 @@ from datetime import datetime
 
 api_key = 'b01ab56d38341be9485d53ebfe5c945d6c35f8d3f3759a4c6bcdfc67f2eee4db'
 
-# Wait three seconds for the kafka broker to start
-sleep(3)
+kafka_running = False
 
-producer = KafkaProducer(bootstrap_servers=['kafka:9092'],
+while kafka_running == False:
+    try:
+        producer = KafkaProducer(bootstrap_servers=['kafka:9092'],
                                 value_serializer=lambda x: dumps(x).encode('utf-8'))
+    except:
+        print('No kafka brokers are running yet')
+        sleep(1)
+    else:
+        kafka_running = True
+        print("Connected to kafka broker!")
 
 while True:
     # Format the url for the api to get a OK response
