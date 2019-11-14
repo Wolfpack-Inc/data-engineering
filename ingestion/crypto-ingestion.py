@@ -12,11 +12,11 @@ kafka_running = False
 
 while kafka_running == False:
     try:
-        producer = KafkaProducer(bootstrap_servers=['kafka-1:9092'],
+        producer = KafkaProducer(bootstrap_servers=['kafka:9092'],
                                 value_serializer=lambda x: dumps(x).encode('utf-8'))
     except:
         print('No kafka brokers are running yet')
-        sleep(3)
+        sleep(1)
     else:
         kafka_running = True
         print("Connected to kafka broker!")
@@ -26,7 +26,7 @@ while True:
     url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=EUR'
     price = loads(requests.get(url).text)['EUR']
 
-    print(price)
+    # print(price)
 
     # Get the current time
     current_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S')
