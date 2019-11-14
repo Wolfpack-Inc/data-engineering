@@ -4,6 +4,7 @@ from tweepy import OAuthHandler, Stream, StreamListener
 from time import sleep
 from json import dumps, loads
 from kafka import KafkaProducer
+from datetime import datetime
 import tweepy
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
@@ -21,8 +22,9 @@ kafka_running = False
 
 while kafka_running == False:
     try:
-        producer = KafkaProducer(bootstrap_servers=['kafka:9092'],
-                                value_serializer=lambda x: dumps(x).encode('utf-8'))
+        producer = KafkaProducer(bootstrap_servers=['kafka:9092'], 
+                                #  key_serializer=str.encode,
+                                 value_serializer=lambda x: dumps(x).encode('utf-8'))
     except:
         print('No kafka brokers are running yet')
         sleep(1)
@@ -41,22 +43,36 @@ class StreamToKafka(StreamListener):
     def on_data(self, data):
         tweet = json.loads(data)
 
+        # If there is no text
+        if 'text' not in tweet:
+            return True
+
         # Get the sentiment of the tweet using vader
         sentiment = analyzer.polarity_scores(tweet['text'])['compound']
 
         # Print the tweet and the sentiment
-        print(round(sentiment, 2), '|', tweet['text'].replace('\n', ''))
+        # print(round(sentiment, 2), '|', tweet['text'].replace('\n', ''))
+
+        # Parse the date
+        date = datetime.strptime(tweet['created_at'], '%a %b %d %X %z %Y')
+        date_str = date.strftime("%d-%m-%Y %H:%M:%S")
+
+        # Get the location of the tweet
+        # print(tweet.keys())
+        # if 'coordinates' in tweet:
+        #     if (tweet['coordinates'] != None) and ('coordinates' in tweet['coordinates']):
+        #         location = tweet['coordinates']['coordinates']
+        #         print(location)
 
         # Data to send
         data = {
-            'timestamp': tweet['created_at'],
+            'timestamp': date_str,
             'text': tweet['text'],
             'sentiment': sentiment
         }
 
         producer.send('twitter', value=data)
 
-        # sleep(5)
         return True
 
     def on_error(self, status):

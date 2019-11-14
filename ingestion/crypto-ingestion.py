@@ -26,7 +26,7 @@ while True:
     url = 'https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=EUR'
     price = loads(requests.get(url).text)['EUR']
 
-    print(price)
+    # print(price)
 
     # Get the current time
     current_time = datetime.now().strftime('%d-%m-%Y %H:%M:%S')

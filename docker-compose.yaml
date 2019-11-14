@@ -39,7 +39,7 @@ services:
     networks:
       - data-engineering-network
     volumes:
-      - ./connect-plugins:/connect-plugins
+      - ./scripts:/scripts
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_REST_PORT: 8083
@@ -64,16 +64,8 @@ services:
       CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
       CONNECT_PLUGIN_PATH: /usr/share/java
       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-3.3.0.jar
-
-  # mongo:
-  #   container_name: mongo
-  #   image: mongo
-  #   networks:
-  #     - data-engineering-network
-  #   ports:
-  #     - '27017:27017'
-  #   logging:
-  #     driver: none
+    logging:
+      driver: none
 
   twitter-ingestion:
     container_name: twitter-ingestion
@@ -97,19 +89,19 @@ services:
     networks:
       - data-engineering-network
 
-  # pyspark:
-  #   container_name: pyspark
-  #   image: jupyter/pyspark-notebook
-  #   volumes: 
-  #     - ./pyspark:/home/jovyan/work
-  #   networks:
-  #     - data-engineering-network
-  #   ports:
-  #     - '8080:8888'
-  #   command: 'start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work'
-  #   user: root
-  #   environment:
-  #     - GRANT_SUDO=yes
+  pyspark:
+    container_name: pyspark
+    image: jupyter/pyspark-notebook
+    volumes: 
+      - ./pyspark:/home/jovyan/work
+    networks:
+      - data-engineering-network
+    ports:
+      - '8080:8888'
+    command: 'start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work'
+    user: root
+    environment:
+      - GRANT_SUDO=yes
   
   elasticsearch:
     container_name: elasticsearch
@@ -129,6 +121,8 @@ services:
       - '9200:9200'
     logging:
       driver: none
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
 
   kibana:
     container_name: kibana
