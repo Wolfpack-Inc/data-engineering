@@ -98,7 +98,7 @@ services:
       - data-engineering-network
     ports:
       - '8080:8888'
-    command: 'start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work'
+    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
     user: root
     environment:
       - GRANT_SUDO=yes
