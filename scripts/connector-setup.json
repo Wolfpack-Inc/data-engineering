@@ -1,0 +1,13 @@
+{
+    "name": "kafka-connector",
+    "config": {
+        "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
+        "tasks.max": "1",
+        "topics": "twitter,crypto",
+        "key.ignore": "true",
+        "schema.ignore": "true",
+        "connection.url": "http://elasticsearch:9200",
+        "type.name": "_doc",
+        "name": "kafka-connector"
+    }
+}
