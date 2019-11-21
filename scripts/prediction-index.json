@@ -1,0 +1,14 @@
+{
+    "mappings": {
+        "properties": {
+            "pred_timestamp": {
+                "type": "date",
+                "format": "dd-MM-yyyy HH:mm:ss"
+            },
+            "prediction": {
+                "type": "double"
+            }
+
+        }
+    }
+}
