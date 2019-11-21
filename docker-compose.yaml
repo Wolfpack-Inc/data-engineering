@@ -28,44 +28,44 @@ services:
     logging:
       driver: none
 
-  connect:
-    container_name: connect
-    image: confluentinc/cp-kafka-connect:5.3.1
-    ports:
-      - 8083:8083
-    depends_on:
-      - zookeeper
-      - kafka
-    networks:
-      - data-engineering-network
-    volumes:
-      - ./scripts:/scripts
-    environment:
-      CONNECT_BOOTSTRAP_SERVERS: kafka:9092
-      CONNECT_REST_PORT: 8083
-      CONNECT_GROUP_ID: 'connect'
-      CONNECT_CONFIG_STORAGE_TOPIC: connect-config
-      CONNECT_OFFSET_STORAGE_TOPIC: connect-offsets
-      CONNECT_STATUS_STORAGE_TOPIC: connect-status
-      CONNECT_REPLICATION_FACTOR: 1
-      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
-      CONNECT_KEY_CONVERTER: 'org.apache.kafka.connect.storage.StringConverter'
-      CONNECT_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
-      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: 'false'
-      CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
-      CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
-      CONNECT_PRODUCER_INTERCEPTOR_CLASSES: 'io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor'
-      CONNECT_CONSUMER_INTERCEPTOR_CLASSES: 'io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor'
-      CONNECT_REST_ADVERTISED_HOST_NAME: 'connect'
-      CONNECT_ZOOKEEPER_CONNECT: zookeeper:2181
-      CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
-      CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
-      CONNECT_PLUGIN_PATH: /usr/share/java
-      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-3.3.0.jar
-    logging:
-      driver: none
+  # connect:
+  #   container_name: connect
+  #   image: confluentinc/cp-kafka-connect:5.3.1
+  #   ports:
+  #     - 8083:8083
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #   networks:
+  #     - data-engineering-network
+  #   volumes:
+  #     - ./scripts:/scripts
+  #   environment:
+  #     CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+  #     CONNECT_REST_PORT: 8083
+  #     CONNECT_GROUP_ID: 'connect'
+  #     CONNECT_CONFIG_STORAGE_TOPIC: connect-config
+  #     CONNECT_OFFSET_STORAGE_TOPIC: connect-offsets
+  #     CONNECT_STATUS_STORAGE_TOPIC: connect-status
+  #     CONNECT_REPLICATION_FACTOR: 1
+  #     CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+  #     CONNECT_KEY_CONVERTER: 'org.apache.kafka.connect.storage.StringConverter'
+  #     CONNECT_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+  #     CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: 'false'
+  #     CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+  #     CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+  #     CONNECT_PRODUCER_INTERCEPTOR_CLASSES: 'io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor'
+  #     CONNECT_CONSUMER_INTERCEPTOR_CLASSES: 'io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor'
+  #     CONNECT_REST_ADVERTISED_HOST_NAME: 'connect'
+  #     CONNECT_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
+  #     CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
+  #     CONNECT_PLUGIN_PATH: /usr/share/java
+  #     CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-3.3.0.jar
+  #   logging:
+  #     driver: none
 
   twitter-ingestion:
     container_name: twitter-ingestion
@@ -98,41 +98,41 @@ services:
       - data-engineering-network
     ports:
       - '8080:8888'
-    command: 'start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work'
+    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
     user: root
     environment:
       - GRANT_SUDO=yes
 
-  elasticsearch:
-    container_name: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - discovery.type=single-node
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-    networks:
-      - data-engineering-network
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    ports:
-      - '9200:9200'
-    logging:
-      driver: none
-    volumes:
-      - ./elasticsearch:/usr/share/elasticsearch/data
+  # elasticsearch:
+  #   container_name: elasticsearch
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.4.2
+  #   environment:
+  #     - cluster.name=docker-cluster
+  #     - bootstrap.memory_lock=true
+  #     - discovery.type=single-node
+  #     - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+  #   networks:
+  #     - data-engineering-network
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   ports:
+  #     - '9200:9200'
+  #   logging:
+  #     driver: none
+  #   volumes:
+  #     - ./elasticsearch:/usr/share/elasticsearch/data
 
-  kibana:
-    container_name: kibana
-    image: docker.elastic.co/kibana/kibana:7.4.2
-    networks:
-      - data-engineering-network
-    ports:
-      - '5601:5601'
-    logging:
-      driver: none
+  # kibana:
+  #   container_name: kibana
+  #   image: docker.elastic.co/kibana/kibana:7.4.2
+  #   networks:
+  #     - data-engineering-network
+  #   ports:
+  #     - '5601:5601'
+  #   logging:
+  #     driver: none
 
 networks:
   data-engineering-network:
