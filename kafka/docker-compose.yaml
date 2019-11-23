@@ -101,20 +101,20 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9094
 
-    twitter-ingestion:
-      container_name: twitter-ingestion
-      build: 
-        context: ./ingestion
-        dockerfile: twitter.Dockerfile
-      image: twitter-ingestion:latest
-      depends_on:
-        - kafka
+  twitter-ingestion:
+    container_name: twitter-ingestion
+    build: 
+      context: ./ingestion
+      dockerfile: twitter.Dockerfile
+    image: twitter-ingestion:latest
+    depends_on:
+      - kafka
 
-    crypto-ingestion:
-      container_name: crypto-ingestion
-      build: 
-        context: ./ingestion
-        dockerfile: crypto.Dockerfile
-      image: crypto-ingestion:latest
-      depends_on:
-        - kafka
+  crypto-ingestion:
+    container_name: crypto-ingestion
+    build: 
+      context: ./ingestion
+      dockerfile: crypto.Dockerfile
+    image: crypto-ingestion:latest
+    depends_on:
+      - kafka
