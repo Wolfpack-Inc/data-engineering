@@ -10,8 +10,6 @@ services:
      - 2181:2181
      - 2888:2888
      - 3888:3888
-    logging:
-      driver: none
 
   kafka:
     container_name: kafka
@@ -25,8 +23,6 @@ services:
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_HOST_NAME: 'kafka'
-    logging:
-      driver: none
 
   connect:
     container_name: connect
@@ -64,8 +60,6 @@ services:
       CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
       CONNECT_PLUGIN_PATH: /usr/share/java
       CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-3.3.0.jar
-    logging:
-      driver: none
 
   twitter-ingestion:
     container_name: twitter-ingestion
@@ -119,8 +113,6 @@ services:
         hard: -1
     ports:
       - '9200:9200'
-    logging:
-      driver: none
     volumes:
       - ./elasticsearch:/usr/share/elasticsearch/data
 
@@ -131,8 +123,6 @@ services:
       - data-engineering-network
     ports:
       - '5601:5601'
-    logging:
-      driver: none
 
 networks:
   data-engineering-network:
