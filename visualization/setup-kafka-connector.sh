@@ -1,0 +1,1 @@
+sudo docker-compose exec connect sh -c "sh /scripts/setup-kafka-sink.sh"

@@ -27,6 +27,4 @@ sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-c
 
 # Set the permissions
 sudo chmod +x /usr/local/bin/docker-compose
-
-# Docker compose up
-sudo docker-compose up
+sudo chmod -R 777 ~

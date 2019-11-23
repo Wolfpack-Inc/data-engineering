@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  pyspark:
+    container_name: pyspark
+    image: jupyter/pyspark-notebook:ad3574d3c5c7
+    volumes: 
+      - ./pyspark:/home/jovyan/work
+    ports:
+      - '8080:8888'
+    command: "start-notebook.sh --NotebookApp.token='' --NotebookApp.notebook_dir=/home/jovyan/work"
+    user: root
+    environment:
+      - GRANT_SUDO=yes
