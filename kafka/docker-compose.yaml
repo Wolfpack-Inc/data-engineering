@@ -61,13 +61,12 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:19092,PLAINTEXT://0.0.0.0:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:19092,PLAINTEXT://10.164.0.10:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.164.0.10:9092,PLAINTEXT://kafka-1:19092
 
   kafka-2:
     container_name: kafka-2
@@ -80,13 +79,12 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:19093,PLAINTEXT://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:19093,PLAINTEXT://10.164.0.10:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.164.0.10:9093,PLAINTEXT://kafka-2:19093
 
   kafka-3:
     container_name: kafka-3
@@ -99,13 +97,12 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
-    # logging:
-    #   driver: none
+    logging:
+      driver: none
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:19094,PLAINTEXT://0.0.0.0:9094
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:19094,PLAINTEXT://10.164.0.10:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.164.0.10:9094,PLAINTEXT://kafka-3:19094
 
   twitter-ingestion:
     container_name: twitter-ingestion
