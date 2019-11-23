@@ -8,8 +8,6 @@ services:
      - 2181:2181
      - 2888:2888
      - 3888:3888
-    logging:
-      driver: none
 
   kafka:
     container_name: kafka
@@ -21,8 +19,6 @@ services:
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_HOST_NAME: '10.164.0.10'
-    logging:
-      driver: none
 
   twitter-ingestion:
     container_name: twitter-ingestion
