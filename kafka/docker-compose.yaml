@@ -56,6 +56,7 @@ services:
     hostname: kafka-1
     ports:
       - '9092:9092'
+      - '19092:19092'
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -65,7 +66,9 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.164.0.10:9092,PLAINTEXT://kafka-1:9092
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:19092,EXTERNAL://0.0.0.0:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:19092,EXTERNAL://10.164.0.10:9092
 
   kafka-2:
     container_name: kafka-2
@@ -73,6 +76,7 @@ services:
     hostname: kafka-2
     ports:
       - '9093:9093'
+      - '19093:19093'
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -82,7 +86,9 @@ services:
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.164.0.10:9093,PLAINTEXT://kafka-2:9093
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:19093,EXTERNAL://0.0.0.0:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:19093,EXTERNAL://10.164.0.10:9093
 
   kafka-3:
     container_name: kafka-3
@@ -90,6 +96,7 @@ services:
     hostname: kafka-3
     ports:
       - '9094:9094'
+      - '19094:19094'
     depends_on:
       - zookeeper-1
       - zookeeper-2
@@ -99,7 +106,9 @@ services:
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://10.164.0.10:9094,PLAINTEXT://kafka-3:9094
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:19094,EXTERNAL://0.0.0.0:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:19094,EXTERNAL://10.164.0.10:9094
 
   twitter-ingestion:
     container_name: twitter-ingestion
