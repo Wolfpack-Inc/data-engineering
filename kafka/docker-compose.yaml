@@ -61,8 +61,8 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
@@ -79,8 +79,8 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
@@ -97,8 +97,8 @@ services:
       - zookeeper-1
       - zookeeper-2
       - zookeeper-3
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
