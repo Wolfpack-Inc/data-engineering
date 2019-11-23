@@ -108,7 +108,7 @@ services:
       dockerfile: twitter.Dockerfile
     image: twitter-ingestion:latest
     depends_on:
-      - kafka
+      - kafka-1
 
   crypto-ingestion:
     container_name: crypto-ingestion
@@ -117,4 +117,4 @@ services:
       dockerfile: crypto.Dockerfile
     image: crypto-ingestion:latest
     depends_on:
-      - kafka
+      - kafka-1
