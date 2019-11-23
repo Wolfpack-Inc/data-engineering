@@ -18,7 +18,7 @@ services:
       - '9092:9092'
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_HOST_NAME: '10.164.0.10'
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://34.90.190.73:9092
 
   twitter-ingestion:
     container_name: twitter-ingestion
