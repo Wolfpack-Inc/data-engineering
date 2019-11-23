@@ -1,7 +1,6 @@
 version: '3.5'
 
 services:
-
   zookeeper:
     container_name: zookeeper
     image: wurstmeister/zookeeper
@@ -32,7 +31,7 @@ services:
       dockerfile: twitter.Dockerfile
     image: twitter-ingestion:latest
     depends_on:
-      - kafka-1
+      - kafka
 
   crypto-ingestion:
     container_name: crypto-ingestion
@@ -41,4 +40,4 @@ services:
       dockerfile: crypto.Dockerfile
     image: crypto-ingestion:latest
     depends_on:
-      - kafka-1
+      - kafka
