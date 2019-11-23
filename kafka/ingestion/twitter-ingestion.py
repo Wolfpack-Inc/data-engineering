@@ -22,7 +22,7 @@ kafka_running = False
 
 while kafka_running == False:
     try:
-        producer = KafkaProducer(bootstrap_servers=['kafka:19092'], value_serializer=lambda x: dumps(x).encode('utf-8'))
+        producer = KafkaProducer(bootstrap_servers=['34.90.190.73:9092'], value_serializer=lambda x: dumps(x).encode('utf-8'))
     except:
         print('No kafka brokers are running yet')
         sleep(1)
