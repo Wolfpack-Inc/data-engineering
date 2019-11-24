@@ -3,7 +3,7 @@
     "config": {
         "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
         "tasks.max": "1",
-        "topics": "twitter,crypto,prediction",
+        "topics": "twitter,crypto,crypto-prediction",
         "key.ignore": "true",
         "schema.ignore": "true",
         "connection.url": "http://elasticsearch:9200",
