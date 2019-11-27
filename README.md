@@ -10,12 +10,18 @@
 7. Clone the data-engineering repository `git clone https://github.com/Wolfpack-Inc/data-engineering.git`
 8. Go into the repo `cd data-engineering`
 9. Run the vm setup script `sh vm-setup.sh`
-10. Open port 8080 in the firewall (See opening ports)
+10. Open port 8080 and 5601 in the firewall (See opening ports)
 11. Go to `<External-Ip>:8080` to check if everything is running
+12. Setup the elasticsearch indices and the confluent connector
+
+#### Setup confluent connector
+1. Go to the root of the repository
+2. Run `sh setup-kafka-connector.sh`
 
 #### Opening a port in your firewall
 1. Open the google shell
 2. Run `gcloud compute firewall-rules create pyspark-notebook --allow tcp:8080 --source-ranges=0.0.0.0/0`
+2. Run `gcloud compute firewall-rules create kibana --allow tcp:5601 --source-ranges=0.0.0.0/0`
 
 #### Starting all services after restart
 1. `cd data-engineering`
