@@ -22,8 +22,7 @@ kafka_running = False
 
 while kafka_running == False:
     try:
-        producer = KafkaProducer(bootstrap_servers=['kafka:9092'], 
-                                #  key_serializer=str.encode,
+        producer = KafkaProducer(bootstrap_servers=['kafka:9092'],
                                  value_serializer=lambda x: dumps(x).encode('utf-8'))
     except:
         print('No kafka brokers are running yet')
@@ -50,19 +49,9 @@ class StreamToKafka(StreamListener):
         # Get the sentiment of the tweet using vader
         sentiment = analyzer.polarity_scores(tweet['text'])['compound']
 
-        # Print the tweet and the sentiment
-        # print(round(sentiment, 2), '|', tweet['text'].replace('\n', ''))
-
         # Parse the date
         date = datetime.strptime(tweet['created_at'], '%a %b %d %X %z %Y')
         date_str = date.strftime("%d-%m-%Y %H:%M:%S")
-
-        # Get the location of the tweet
-        # print(tweet.keys())
-        # if 'coordinates' in tweet:
-        #     if (tweet['coordinates'] != None) and ('coordinates' in tweet['coordinates']):
-        #         location = tweet['coordinates']['coordinates']
-        #         print(location)
 
         # Data to send
         data = {
