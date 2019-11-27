@@ -30,5 +30,4 @@
 
 #### Changed ingestion script
 1. You will need to rebuild the ingestion image
-2. Run `sudo docker-compose build`
-3. Restart docker compose `sudo docker-compose up`
+2. Run `sudo docker-compose up --build`
